@@ -4,7 +4,7 @@ import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
 import onlyWarn from "eslint-plugin-only-warn";
 import importPlugin from "eslint-plugin-import";
-import stylistic from '@stylistic/eslint-plugin'
+import stylistic from "@stylistic/eslint-plugin";
 
 /**
  * @type {import("eslint").Linter.Config[]}
@@ -18,7 +18,7 @@ const config = [
     settings: {
       typescript: true,
       node: true,
-    }
+    },
   },
 
   importPlugin.flatConfigs.recommended,
@@ -43,12 +43,7 @@ const config = [
   },
 
   {
-    files: ["**/*.{ts,tsx}"],
-    settings: {
-      "import/resolver": {
-        typescript: true,
-      },
-    },
+    files: ["**/*.{js,mjs,ts,tsx}"],
     rules: {
       "import/newline-after-import": "error",
       "import/order": [
@@ -75,6 +70,11 @@ const config = [
               position: "before",
             },
             {
+              pattern: '@repo/**',
+              group: 'internal',
+              position: 'after',
+            },
+            {
               pattern: "@/**",
               group: "internal",
               position: "after",
@@ -82,6 +82,21 @@ const config = [
           ],
           pathGroupsExcludedImportTypes: ["builtin"],
         },
+      ],
+    }
+  },
+
+  {
+    files: ["**/*.{ts,tsx}"],
+    settings: {
+      "import/resolver": {
+        typescript: true,
+      },
+    },
+    rules: {
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { prefer: "type-imports", disallowTypeAnnotations: true },
       ],
       "@typescript-eslint/no-unused-vars": [
         "error",
