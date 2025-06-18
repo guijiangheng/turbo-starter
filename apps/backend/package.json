@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "dotenv -- tsx src/index.ts",
+    "dev": "dotenv -- tsx watch src/index.ts",
     "db:generate": "dotenv -- drizzle-kit generate",
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:push": "dotenv -- drizzle-kit push",

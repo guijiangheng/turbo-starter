@@ -5,6 +5,7 @@ import { appRouter } from "./router";
 
 const server = createHTTPServer({
   router: appRouter,
+  basePath: "/trpc/",
 });
 
 server.listen(env.PORT, () => {
