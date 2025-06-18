@@ -4,11 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "dotenv -- tsx src/index.ts",
     "db:generate": "dotenv -- drizzle-kit generate",
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:push": "dotenv -- drizzle-kit push",
     "db:drop": "dotenv -- drizzle-kit drop",
     "db:studio": "dotenv -- drizzle-kit studio"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./router": "./src/router.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +29,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
+    "@trpc/server": "^11.4.2",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "pg": "^8.16.0",

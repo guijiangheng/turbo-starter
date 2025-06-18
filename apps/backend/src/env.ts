@@ -3,6 +3,7 @@ import { z } from "zod/v4";
 
 export const env = createEnv({
   server: {
+    PORT: z.coerce.number().positive().int().default(3000),
     DATABASE_URL: z.url(),
   },
   runtimeEnv: process.env,
