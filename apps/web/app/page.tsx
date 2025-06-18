@@ -1,3 +1,9 @@
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
-  return <div className="bg-amber-200">sdf</div>;
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  );
 }
