@@ -1,7 +1,8 @@
-import { COLORS } from "@/colors";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
+
+import { COLORS } from "@/colors";
 
 export default function TabsLayout() {
   const { isSignedIn, isLoaded } = useAuth();

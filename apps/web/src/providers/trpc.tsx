@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type JSX, type ReactNode } from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
@@ -9,7 +9,11 @@ import type { AppRouter } from "@repo/backend/router";
 
 import { TRPCProvider } from "@/lib/trpc";
 
-export function AppTrpcProvider({ children }: { children: ReactNode }) {
+export function AppTrpcProvider({
+  children,
+}: {
+  children: ReactNode;
+}): JSX.Element {
   const [queryClient] = useState(
     () =>
       new QueryClient({

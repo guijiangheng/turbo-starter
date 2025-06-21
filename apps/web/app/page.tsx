@@ -1,10 +1,12 @@
 "use client";
 
+import type { JSX } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/lib/trpc";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const trpc = useTRPC();
 
   const userQuery = useQuery(trpc.userList.queryOptions("test"));
