@@ -41,7 +41,7 @@ export default function RecipeDetailScreen() {
             onChangeText={setSearch}
             returnKeyType="search"
           />
-          {searchQuery.length > 0 && (
+          {search.length > 0 && (
             <TouchableOpacity
               onPress={() => setSearch("")}
               style={styles.clearButton}

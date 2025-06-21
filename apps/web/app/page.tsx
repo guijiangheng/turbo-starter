@@ -9,7 +9,7 @@ import { useTRPC } from "@/lib/trpc";
 export default function Home(): JSX.Element {
   const trpc = useTRPC();
 
-  const userQuery = useQuery(trpc.userList.queryOptions("test"));
+  const userQuery = useQuery(trpc.getFavorites.queryOptions("sdf"));
 
   if (userQuery.isLoading) {
     return <div>Loading...</div>;
