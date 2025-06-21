@@ -23,10 +23,11 @@ export default function FavoritesScreen() {
   const { signOut } = useClerk();
   const { user } = useUser();
 
-  const favoritesQuery = useQuery({
-    ...trpc.getFavorites.queryOptions(user!.id),
-    enabled: !!user?.id,
-  });
+  const favoritesQuery = useQuery(
+    trpc.getFavorites.queryOptions(user!.id, {
+      enabled: !!user?.id,
+    }),
+  );
 
   const handleSignOut = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -52,7 +53,9 @@ export default function FavoritesScreen() {
         <View style={styles.recipesSection}>
           <FlatList
             data={favoritesQuery.data ?? []}
-            renderItem={({ item }) => <RecipeCard recipe={item} />}
+            renderItem={({ item }) => (
+              <RecipeCard recipe={{ ...item, id: item.recipeId } as any} />
+            )}
             keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             columnWrapperStyle={styles.row}
@@ -119,6 +122,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+
+  recipesSection: {
+    marginTop: 16,
+  },
+  row: {
+    gap: 16,
+  },
+  recipesGrid: {
+    gap: 16,
+    padding: 16,
   },
 
   emptyState: {

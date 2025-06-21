@@ -37,6 +37,7 @@ export const appRouter = router({
     console.log(input, "input");
     return db.select().from(favorites).where(eq(favorites.userId, input));
   }),
+
   deleteFavorite: publicProcedure
     .input(
       z.object({

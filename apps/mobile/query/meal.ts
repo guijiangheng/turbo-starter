@@ -29,25 +29,33 @@ export const recipesQuery = (count: number) =>
         .filter((x) => x !== null),
   });
 
-export const searchQuery = (query: string) => queryOptions({
-  queryKey: ["search", query],
-  queryFn: async () => {
-    if (!query.trim()) {
-      return MealAPI.getRandomMeals(12);
-    }
+export const searchQuery = (query: string) =>
+  queryOptions({
+    queryKey: ["search", query],
+    queryFn: async () => {
+      if (!query.trim()) {
+        return MealAPI.getRandomMeals(12);
+      }
 
-    const nameSearchResult = await MealAPI.searchMealsByName(query);
+      const nameSearchResult = await MealAPI.searchMealsByName(query);
 
-    if (nameSearchResult.length) {
-      return nameSearchResult
-    }
+      if (nameSearchResult.length) {
+        return nameSearchResult;
+      }
 
-    const ingredientSearchResult = await MealAPI.filterByIngredient(query);
+      const ingredientSearchResult = await MealAPI.filterByIngredient(query);
 
-    return ingredientSearchResult.slice(0, 12);
-  },
-  select: (meals: any[]) =>
-    meals
-      .map((meal) => MealAPI.transformMealData(meal))
-      .filter((x) => x !== null),
-})
+      return ingredientSearchResult.slice(0, 12);
+    },
+    select: (meals: any[]) =>
+      meals
+        .map((meal) => MealAPI.transformMealData(meal))
+        .filter((x) => x !== null),
+  });
+
+export const recipeDetailQuery = (id: string) =>
+  queryOptions({
+    queryKey: ["recipe-detail", id],
+    queryFn: () => MealAPI.getMealById(id),
+    select: MealAPI.transformMealData,
+  });

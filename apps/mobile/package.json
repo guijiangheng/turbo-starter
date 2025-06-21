@@ -16,6 +16,7 @@
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
+    "@repo/backend": "workspace:*",
     "@tanstack/react-pacer": "^0.8.0",
     "@tanstack/react-query": "^5.80.7",
     "@trpc/client": "^11.4.2",
@@ -27,6 +28,7 @@
     "expo-font": "~13.3.1",
     "expo-haptics": "~14.1.4",
     "expo-image": "~2.3.0",
+    "expo-linear-gradient": "^14.1.5",
     "expo-linking": "~7.1.5",
     "expo-router": "~5.1.0",
     "expo-secure-store": "^14.2.3",
@@ -43,8 +45,7 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5",
-    "@repo/backend": "workspace:*"
+    "react-native-webview": "13.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
