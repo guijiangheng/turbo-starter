@@ -1,6 +1,8 @@
 import { Image } from "expo-image";
 import React, { Suspense, useState } from "react";
 import {
+  FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,28 +10,42 @@ import {
   View,
 } from "react-native";
 
-import { useSuspenseQueries } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQueries } from "@tanstack/react-query";
 
 import { COLORS } from "@/colors";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import {
-  categoriesQuery,
-  featureMealQuery,
-  randomMealsQuery,
-} from "@/query/meal";
+import { categoriesQuery, featureMealQuery, recipesQuery } from "@/query/meal";
 import { Ionicons } from "@expo/vector-icons";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { RecipeCard } from "@/components/RecipeCard";
 
 function HomeViewImpl() {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const queryClient = useQueryClient();
 
-  const [{ data: categories }, { data: featuredRecipe }, randomMeals] =
+  const [{ data: categories }, { data: featuredRecipe }, { data: recipes }] =
     useSuspenseQueries({
-      queries: [categoriesQuery, featureMealQuery, randomMealsQuery(6)],
+      queries: [categoriesQuery, featureMealQuery, recipesQuery(6)],
     });
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    () => categories[0].name ?? "",
+  );
 
   function handleCategorySelect(category: string) {
     setSelectedCategory(category);
+    queryClient.invalidateQueries(recipesQuery(6));
+  }
+
+  async function onRefresh() {
+    setRefreshing(true);
+    await Promise.all([
+      queryClient.invalidateQueries(recipesQuery(6)),
+      queryClient.invalidateQueries(categoriesQuery),
+      queryClient.invalidateQueries(featureMealQuery),
+    ]);
+    setRefreshing(false);
   }
 
   return (
@@ -37,6 +53,13 @@ function HomeViewImpl() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={COLORS.primary}
+          />
+        }
       >
         <View style={styles.welcomeSection}>
           <Image
@@ -130,6 +153,33 @@ function HomeViewImpl() {
             onSelectCategory={handleCategorySelect}
           />
         )}
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{selectedCategory}</Text>
+        </View>
+
+        <FlatList
+          data={recipes}
+          renderItem={({ item }) => <RecipeCard recipe={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.recipesGrid}
+          scrollEnabled={false}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Ionicons
+                name="restaurant-outline"
+                size={64}
+                color={COLORS.textLight}
+              />
+              <Text style={styles.emptyTitle}>No recipes found</Text>
+              <Text style={styles.emptyDescription}>
+                Try a different category
+              </Text>
+            </View>
+          }
+        />
       </ScrollView>
     </View>
   );
@@ -230,5 +280,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.white,
     fontWeight: 600,
+  },
+  recipesSection: {
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  sectionHeader: {
+    marginTop: 24,
+    paddingHorizontal: 16,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: 700,
+    color: COLORS.text,
+    letterSpacing: -0.5,
+  },
+  recipesGrid: {
+    gap: 16,
+    padding: 16,
+  },
+  row: {
+    justifyContent: "space-between",
+    gap: 16,
+  },
+  emptyState: {
+    alignItems: "center",
+    paddingVertical: 64,
+    paddingHorizontal: 32,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: COLORS.text,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyDescription: {
+    fontSize: 14,
+    color: COLORS.textLight,
+    textAlign: "center",
   },
 });
